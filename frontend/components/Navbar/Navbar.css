@@ -1,0 +1,39 @@
+.navbar {
+  height: 70px;
+  background: #111827;
+  color: white;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0 40px;
+
+  border-bottom: 1px solid #1f2937;
+}
+
+.navbar-logo h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.navbar-logo span {
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.navbar-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  font-weight: 600;
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+
+  background: #22c55e;
+  border-radius: 50%;
+}
