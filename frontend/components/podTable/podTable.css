@@ -1,0 +1,33 @@
+.table-container {
+  margin-top: 30px;
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.pod-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.pod-table thead {
+  background: #1e293b;
+}
+
+.pod-table th {
+  padding: 16px;
+  text-align: left;
+  color: #cbd5e1;
+  font-size: 14px;
+}
+
+.pod-table td {
+  padding: 16px;
+  border-top: 1px solid #1f2937;
+  color: white;
+}
+
+.pod-table tbody tr:hover {
+  background: #1e293b;
+}
