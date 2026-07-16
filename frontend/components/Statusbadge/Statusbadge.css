@@ -1,8 +1,24 @@
 .badge {
   padding: 6px 12px;
-  border-radius: 20px;
-  color: white;
-  font-size: 13px;
+  border-radius: 999px;
+  font-size: 12px;
   font-weight: 600;
-  background: #3b82f6;
+  color: white;
+}
+
+.badge.running {
+  background: #16a34a;
+}
+
+.badge.pending {
+  background: #eab308;
+  color: black;
+}
+
+.badge.failed {
+  background: #dc2626;
+}
+
+.badge.unknown {
+  background: #6b7280;
 }

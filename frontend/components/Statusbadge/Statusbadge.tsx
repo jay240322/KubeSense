@@ -1,9 +1,11 @@
-import "./Statusbadge.css"
+import "./Statusbadge.css";
 
-export default function Ststusbadge({status}: {status:string}) {
-    return (
-        <span className={'badge $(status.toLowerCase()}'}>
-            {status}
-        </span>
-    );
+interface Props {
+  status: string;
+}
+
+export default function Statusbadge({ status }: Props) {
+  const badgeClass = `badge ${status.toLowerCase()}`;
+
+  return <span className={badgeClass}>{status}</span>;
 }
