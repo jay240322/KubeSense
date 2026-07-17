@@ -1,25 +1,46 @@
-import styles from "./page.module.css";
+"use client";
+
+import Navbar from "@/components/Navbar/Navbar";
+import SearchBar from "@/components/Searchbar/Searchbar";
+import RefreshButton from "@/components/Refreshbutton/Refreshbutton";
+import PodTable from "@/components/podTable/podTable";
+import usePods from "@/hooks/usePods";
+
+import { useState } from "react";
 
 export default function Home() {
+  const { pods, loading, error } = usePods();
+
+  const [search, setSearch] = useState("");
+
+  const filteredPods = pods.filter(
+    (pod) =>
+      pod.name.toLowerCase().includes(search.toLowerCase()) ||
+      pod.namespace.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
-    <main className={styles.container}>
-      <div className={styles.content}>
-        <h1 className={styles.title}>KubeSense</h1>
+    <>
+      <Navbar />
 
-        <p className={styles.subtitle}>
-          Ai-Powerder kubernetes troubleshooting assistant
-        </p>
+      <div style={{ padding: "30px" }}>
+        <SearchBar
+          search={search}
+          setSearch={setSearch}
+        />
 
-        <div className={styles.card}>
-          <h2 className={styles.cardTitle}>Project Ststus</h2>
-          <p className={styles.text}>
-            Frontend is running successfully.
-          </p>
-          <p className={styles.status}>
-            Backend: not connected
-          </p>
+        <div style={{ margin: "20px 0" }}>
+          <RefreshButton />
         </div>
+
+        {loading && <p>Loading Pods...</p>}
+
+        {error && <p>{error}</p>}
+
+        {!loading && !error && (
+          <PodTable pods={filteredPods} />
+        )}
       </div>
-    </main>
+    </>
   );
 }
