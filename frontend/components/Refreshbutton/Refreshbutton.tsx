@@ -1,8 +1,12 @@
-import "./Refreshbutton.css";
+interface RefreshButtonProps {
+  onRefresh: () => void;
+}
 
-export default function Refreshbutton() {
+export default function RefreshButton({
+  onRefresh,
+}: RefreshButtonProps) {
   return (
-    <button className="refresh-btn">
+    <button onClick={onRefresh}>
       🔄 Refresh
     </button>
   );

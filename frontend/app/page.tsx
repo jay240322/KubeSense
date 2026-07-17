@@ -9,7 +9,11 @@ import usePods from "@/hooks/usePods";
 import { useState } from "react";
 
 export default function Home() {
-  const { pods, loading, error } = usePods();
+  const { pods,
+          loading, 
+          error,
+          refreshPods,
+         } = usePods();
 
   const [search, setSearch] = useState("");
 
@@ -30,7 +34,7 @@ export default function Home() {
         />
 
         <div style={{ margin: "20px 0" }}>
-          <RefreshButton />
+          <RefreshButton onRefresh={refreshPods}/>
         </div>
 
         {loading && <p>Loading Pods...</p>}
