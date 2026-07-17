@@ -2,7 +2,7 @@ export interface Pod {
     name: string;
     namespace: string;
     status: string;
-    nod: string;
+    node: string;
     restarts: number;
     age: string;
 }

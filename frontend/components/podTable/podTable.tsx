@@ -1,5 +1,5 @@
-import "./PodTable.css";
-import StatusBadge from "../StatusBadge/StatusBadge";
+import "./podTable.css";
+import Statusbadge from "../Statusbadge/Statusbadge";
 import { Pod } from "@/types/pod";
 
 interface PodTableProps {
@@ -27,7 +27,7 @@ export default function PodTable({ pods }: PodTableProps) {
               <td>{pod.name}</td>
               <td>{pod.namespace}</td>
               <td>
-                <StatusBadge status={pod.status} />
+                <Statusbadge status={pod.status} />
               </td>
               <td>{pod.node}</td>
               <td>{pod.restarts}</td>
