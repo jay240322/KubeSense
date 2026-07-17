@@ -1,6 +1,6 @@
-import "./RefreshButton.css";
+import "./Refreshbutton.css";
 
-export default function RefreshButton() {
+export default function Refreshbutton() {
   return (
     <button className="refresh-btn">
       🔄 Refresh
