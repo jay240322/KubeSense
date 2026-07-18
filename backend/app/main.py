@@ -1,6 +1,10 @@
 from fastapi import FastAPI
-from app.kubernetes.pods import list_pods
 from fastapi.middleware.cors import CORSMiddleware
+
+from app.kubernetes.pods import (
+    list_pods,
+    get_pod_details,
+)
 
 app = FastAPI (
     title="KubeSense API",
@@ -36,3 +40,7 @@ def get_pods():
     return {
         "pods":list_pods()
     }
+
+@app.get("/api/v1/pods/{namespace}/{pod_name}")
+def pod_details(namespace: str, pod_name: str):
+    return get_pod_details(namespace, pod_name)
