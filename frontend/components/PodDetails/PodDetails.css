@@ -1,0 +1,40 @@
+.pod-details {
+  margin-top: 30px;
+  padding: 20px;
+  border-radius: 10px;
+  background: #1e293b;
+  color: white;
+}
+
+.pod-details h2 {
+  margin-bottom: 20px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #334155;
+}
+
+.detail-row span:first-child {
+  font-weight: bold;
+}
+
+.images-section {
+  margin-top: 20px;
+}
+
+.images-section h3 {
+  margin-bottom: 10px;
+}
+
+.images-section ul {
+  padding-left: 20px;
+}
+
+.images-section li {
+  margin-bottom: 6px;
+  word-break: break-word;
+}

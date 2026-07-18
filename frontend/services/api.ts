@@ -9,3 +9,19 @@ export async function getPods() {
 
   return response.json();
 }
+
+export async function getPodDetails(
+  namespace: string,
+  podName: string
+){
+  const response = await fetch(
+      `${API_BASE}/api/v1/pods/${namespace}/${podName}`
+  );
+
+  if(!response.ok) {
+    throw new Error("Filed to fetch pod details");
+  }
+
+  return response.json();
+}
+
