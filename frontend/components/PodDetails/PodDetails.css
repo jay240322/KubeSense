@@ -38,3 +38,19 @@
   margin-bottom: 6px;
   word-break: break-word;
 }
+
+.logs-button {
+  margin-top: 25px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.logs-button:hover {
+  background: #1d4ed8;
+}

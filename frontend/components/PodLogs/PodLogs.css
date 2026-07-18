@@ -1,0 +1,25 @@
+.pod-logs {
+  margin-top: 30px;
+  background: #0f172a;
+  color: #e2e8f0;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.pod-logs h2 {
+  margin-bottom: 20px;
+}
+
+.pod-logs pre {
+  background: #020617;
+  padding: 15px;
+  border-radius: 8px;
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 450px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: monospace;
+  font-size: 14px;
+  line-height: 1.5;
+}

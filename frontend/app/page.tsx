@@ -7,9 +7,15 @@ import SearchBar from "@/components/Searchbar/Searchbar";
 import RefreshButton from "@/components/Refreshbutton/Refreshbutton";
 import PodTable from "@/components/podTable/podTable";
 import PodDetails from "@/components/PodDetails/PodDetails";
+import PodLogs from "@/components/PodLogs/PodLogs";
 
 import usePods from "@/hooks/usePods";
-import { getPodDetails } from "@/services/api";
+
+import {
+  getPodDetails,
+  getPodLogs,
+} from "@/services/api";
+
 import { PodDetails as PodDetailsType } from "@/types/pod";
 
 export default function Home() {
@@ -24,6 +30,8 @@ export default function Home() {
 
   const [selectedPod, setSelectedPod] =
     useState<PodDetailsType | null>(null);
+
+  const [logs, setLogs] = useState("");
 
   const filteredPods = pods.filter((pod) => {
     const query = search.toLowerCase();
@@ -41,9 +49,25 @@ export default function Home() {
   ) {
     try {
       const pod = await getPodDetails(namespace, podName);
+
       setSelectedPod(pod);
+
+      setLogs("");
     } catch (error) {
-      console.error("Failed to fetch pod details:", error);
+      console.error(error);
+    }
+  }
+
+  async function handleViewLogs(
+    namespace: string,
+    podName: string
+  ) {
+    try {
+      const response = await getPodLogs(namespace, podName);
+
+      setLogs(response.logs);
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -72,7 +96,16 @@ export default function Home() {
               onSelectPod={handleSelectPod}
             />
 
-            <PodDetails pod={selectedPod} />
+            <PodDetails
+              pod={selectedPod}
+              onViewLogs={handleViewLogs}
+            />
+
+            {logs && (
+              <PodLogs
+                logs={logs}
+              />
+            )}
           </>
         )}
       </div>

@@ -13,15 +13,29 @@ export async function getPods() {
 export async function getPodDetails(
   namespace: string,
   podName: string
-){
+) {
   const response = await fetch(
-      `${API_BASE}/api/v1/pods/${namespace}/${podName}`
+    `${API_BASE}/api/v1/pods/${namespace}/${podName}`
   );
 
-  if(!response.ok) {
-    throw new Error("Filed to fetch pod details");
+  if (!response.ok) {
+    throw new Error("Failed to fetch pod details");
   }
 
   return response.json();
 }
 
+export async function getPodLogs(
+  namespace: string,
+  podName: string
+) {
+  const response = await fetch(
+    `${API_BASE}/api/v1/pods/${namespace}/${podName}/logs`
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch pod logs");
+  }
+
+  return response.json();
+}

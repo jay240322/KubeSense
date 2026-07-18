@@ -38,6 +38,7 @@ def list_pods():
 
     return pod_list
 
+
 def get_pod_details(namespace: str, pod_name: str):
     api = get_k8s_client()
 
@@ -59,7 +60,6 @@ def get_pod_details(namespace: str, pod_name: str):
     if created:
         age = datetime.now(timezone.utc) - created
         age = f"{age.days}d"
-
     else:
         age = "Unknown"
 
@@ -78,5 +78,24 @@ def get_pod_details(namespace: str, pod_name: str):
         "node": pod.spec.node_name,
         "restarts": restart_count,
         "age": age,
-        "images" : images,
-    } 
+        "images": images,
+    }
+
+
+def get_pod_logs(namespace: str, pod_name: str):
+    api = get_k8s_client()
+
+    logs = api.read_namespaced_pod_log(
+        name=pod_name,
+        namespace=namespace,
+        tail_lines=200,
+        _preload_content=False
+    )
+
+    log_text = logs.data.decode("utf-8")
+
+    return {
+        "name": pod_name,
+        "namespace": namespace,
+        "logs": log_text
+    }

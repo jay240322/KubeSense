@@ -10,9 +10,14 @@ interface PodDetailsProps {
         age: string;
         images: string[];
     } | null;
+
+    onViewLogs: (namespace: string, podName: string) => void;
 }
 
-export default function PodDetails({ pod }: PodDetailsProps){
+export default function PodDetails({
+    pod,
+    onViewLogs,
+}: PodDetailsProps){
     if (!pod) {
         return (
             <div className="pod-details">
@@ -64,6 +69,15 @@ export default function PodDetails({ pod }: PodDetailsProps){
             ))}
             </ul>
         </div>
+
+        <button 
+        className= "logs-button"
+        onClick={()=>
+            onViewLogs(pod.namespace, pod.name)
+        }
+        >
+          📜 view logs
+        </button>
     </div>
     );
 }
