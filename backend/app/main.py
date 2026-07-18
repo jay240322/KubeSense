@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.kubernetes.pods import (
     list_pods,
     get_pod_details,
+    get_pod_logs,
 )
 
 app = FastAPI (
@@ -44,3 +45,7 @@ def get_pods():
 @app.get("/api/v1/pods/{namespace}/{pod_name}")
 def pod_details(namespace: str, pod_name: str):
     return get_pod_details(namespace, pod_name)
+
+@app.get("/api/v1/pods/{namespace}/{pod_name}/logs")
+def pod_logs(namespace: str, pod_name: str):
+    return get_pod_logs(namespace, pod_name)
