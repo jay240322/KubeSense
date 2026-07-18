@@ -1,36 +1,55 @@
 "use client";
 
+import { useState } from "react";
+
 import Navbar from "@/components/Navbar/Navbar";
 import SearchBar from "@/components/Searchbar/Searchbar";
 import RefreshButton from "@/components/Refreshbutton/Refreshbutton";
 import PodTable from "@/components/podTable/podTable";
-import usePods from "@/hooks/usePods";
+import PodDetails from "@/components/PodDetails/PodDetails";
 
-import { useState } from "react";
+import usePods from "@/hooks/usePods";
+import { getPodDetails } from "@/services/api";
+import { PodDetails as PodDetailsType } from "@/types/pod";
 
 export default function Home() {
-  const { pods,
-          loading, 
-          error,
-          refreshPods,
-         } = usePods();
+  const {
+    pods,
+    loading,
+    error,
+    refreshPods,
+  } = usePods();
 
   const [search, setSearch] = useState("");
 
+  const [selectedPod, setSelectedPod] =
+    useState<PodDetailsType | null>(null);
 
   const filteredPods = pods.filter((pod) => {
     const query = search.toLowerCase();
 
-    return(
+    return (
       pod.name.toLowerCase().includes(query) ||
       pod.namespace.toLowerCase().includes(query) ||
       pod.status.toLowerCase().includes(query)
     );
   });
 
+  async function handleSelectPod(
+    namespace: string,
+    podName: string
+  ) {
+    try {
+      const pod = await getPodDetails(namespace, podName);
+      setSelectedPod(pod);
+    } catch (error) {
+      console.error("Failed to fetch pod details:", error);
+    }
+  }
+
   return (
     <>
-      <Navbar/>
+      <Navbar />
 
       <div style={{ padding: "30px" }}>
         <SearchBar
@@ -39,37 +58,22 @@ export default function Home() {
         />
 
         <div style={{ margin: "20px 0" }}>
-          <RefreshButton onRefresh={refreshPods}/>
+          <RefreshButton onRefresh={refreshPods} />
         </div>
-        
-        {loading && (
-          <div style={{ marginTop: "20px" }}>
-                  🔄 Loading Kubernetes Pods...
-          </div>
-        )}
 
-        {error && (
-            <div
-              style={{
-                background: "#3b0d0d",
-                color: "#ffb4b4",
-                padding: "15px",
-                borderRadius: "8px",
-                marginTop: "20px",
-              }}
-            >
-              ❌ Unable to connect to the Kubernetes API.
-              <br />
-              Please verify that:
-              <ul>
-                <li>Backend is running</li>
-                <li>Minikube is running</li>
-              </ul>
-            </div>
-         )}
+        {loading && <p>Loading Pods...</p>}
+
+        {error && <p>{error}</p>}
 
         {!loading && !error && (
-          <PodTable pods={filteredPods} />
+          <>
+            <PodTable
+              pods={filteredPods}
+              onSelectPod={handleSelectPod}
+            />
+
+            <PodDetails pod={selectedPod} />
+          </>
         )}
       </div>
     </>
