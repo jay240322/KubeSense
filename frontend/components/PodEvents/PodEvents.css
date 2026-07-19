@@ -1,0 +1,54 @@
+.pod-events {
+  margin-top: 30px;
+  padding: 20px;
+  border-radius: 10px;
+  background: #1e293b;
+  color: white;
+}
+
+.pod-events h2 {
+  margin-bottom: 20px;
+}
+
+.event-card {
+  margin-bottom: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  background: #0f172a;
+}
+
+.event-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.event-type {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.event-type.normal {
+  background: #16a34a;
+  color: white;
+}
+
+.event-type.warning {
+  background: #dc2626;
+  color: white;
+}
+
+.event-time {
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.event-card h3 {
+  margin-bottom: 10px;
+}
+
+.event-card p {
+  line-height: 1.5;
+}
