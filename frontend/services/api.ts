@@ -39,3 +39,18 @@ export async function getPodLogs(
 
   return response.json();
 }
+
+export async function getPodEvents(
+  namespace: string,
+  podName: string
+){
+  const response = await fetch (
+    `${API_BASE}/api/v1/pods/${namespace}/${podName}/events`
+  );
+
+  if(!response.ok) {
+    throw new Error("failed to fetch pod events");
+  }
+
+  return response.json();
+}

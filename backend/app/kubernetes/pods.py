@@ -1,7 +1,6 @@
 from .client import get_k8s_client
 from datetime import datetime, timezone
 
-
 def list_pods():
     api = get_k8s_client()
 
@@ -98,4 +97,28 @@ def get_pod_logs(namespace: str, pod_name: str):
         "name": pod_name,
         "namespace": namespace,
         "logs": log_text
+    }
+
+def get_pod_events(namespace: str, pod_name: str):
+    api = get_k8s_client()
+
+    events = api.list_namespaced_event(
+        namespace=namespace,
+        field_selector=f"involvedObject.name={pod_name}"
+    )
+
+    event_list = []
+
+    for event in events.items:
+        event_list.append({
+            "type": event.type,
+            "reason": event.reason,
+            "message": event.message,
+            "time": str(event.last_timestamp or event.event_time or "")
+        })
+
+    return {
+        "name": pod_name,
+        "namespace": namespace,
+        "events": event_list
     }

@@ -5,6 +5,7 @@ from app.kubernetes.pods import (
     list_pods,
     get_pod_details,
     get_pod_logs,
+    get_pod_events,
 )
 
 app = FastAPI (
@@ -49,3 +50,7 @@ def pod_details(namespace: str, pod_name: str):
 @app.get("/api/v1/pods/{namespace}/{pod_name}/logs")
 def pod_logs(namespace: str, pod_name: str):
     return get_pod_logs(namespace, pod_name)
+
+@app.get("/api/v1/pods/{namespace}/{pod_name}/{events}")
+def pod_events(namespace: str, pod_name: str):
+    return get_pod_events(namespace, pod_name)

@@ -39,18 +39,35 @@
   word-break: break-word;
 }
 
-.logs-button {
+.button-group {
+  display: flex;
+  gap: 15px;
   margin-top: 25px;
+}
+
+.logs-button,
+.events-button {
   padding: 12px 20px;
   border: none;
   border-radius: 8px;
-  background: #2563eb;
   color: white;
   cursor: pointer;
   font-size: 15px;
   font-weight: 600;
 }
 
+.logs-button {
+  background: #2563eb;
+}
+
 .logs-button:hover {
   background: #1d4ed8;
+}
+
+.events-button {
+  background: #9333ea;
+}
+
+.events-button:hover {
+  background: #7e22ce;
 }
