@@ -1,4 +1,6 @@
 import "./PodDetails.css";
+import AIAnalysis from "../AIAnalysis/AIAnalysis";
+import useAI from "@/hooks/useAI";
 
 interface PodDetailsProps {
   pod: {
@@ -20,6 +22,21 @@ export default function PodDetails({
   onViewLogs,
   onViewEvents,
 }: PodDetailsProps) {
+  const {
+    analysis,
+    loading,
+    error,
+    analyze,
+  } = useAI();
+
+  async function handleAnalyze(){
+    if(!pod) return;
+
+    await analyze(
+      pod.namespace,
+      pod.name
+    );
+  }
   if (!pod) {
     return (
       <div className="pod-details">
@@ -87,7 +104,21 @@ export default function PodDetails({
         >
           📅 View Events
         </button>
+
+        <button
+          className="ai-button"
+          onClick={handleAnalyze}
+          disabled={loading}
+        >
+          {loading ? "🤖 Analyzing..." : "🤖 Analyze with AI"}
+        </button>
       </div>
+      <AIAnalysis
+      analysis={analysis}
+      loading={loading}
+      error={error}
+      />
+      
     </div>
   );
 }
