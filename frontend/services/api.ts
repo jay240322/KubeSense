@@ -54,3 +54,27 @@ export async function getPodEvents(
 
   return response.json();
 }
+
+export async function analyzePod(
+   namespace: string,
+  podName: string
+){
+  const response = await fetch(
+    `${API_BASE}/api/v1/analyze`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        namespace: namespace,
+        pod_name: podName,
+      }),
+    }
+  );
+
+  if(!response.ok){
+    throw new Error("Faailed to analyze pod");
+  }
+  return response.json();
+}

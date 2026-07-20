@@ -1,0 +1,28 @@
+.ai-analysis {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: #ffffff;
+}
+
+.ai-analysis h2 {
+    margin-bottom: 15px;
+}
+
+.loading {
+    color: #0070f3;
+    font-weight: bold;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+}
+
+.analysis-text {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    line-height: 1.6;
+    font-size: 15px;
+}

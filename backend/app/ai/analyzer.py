@@ -7,12 +7,30 @@ from app.ai.client import (
 
 from app.ai.prompts import SYSTEM_PROMPT
 
+from app.kubernetes.pods import (
+    get_pod_details,
+    get_pod_logs,
+    get_pod_events,
+)
 
 def analyze_pod(
-    pod_details: dict,
-    pod_logs: str,
-    pod_events: list,
+    namespace: str,
+    pod_name: str,
 ):
+    pod_details = get_pod_details(
+        namespace,
+        pod_name,
+    )
+
+    pod_logs = get_pod_logs(
+        namespace,
+        pod_name,
+    )
+
+    pod_events = get_pod_events(
+        namespace,
+        pod_name
+    )
 
     prompt = f"""
 {SYSTEM_PROMPT}

@@ -69,7 +69,6 @@ def pod_events(namespace: str, pod_name: str):
 @app.post("/api/v1/analyze")
 def analyze(request: AnalyzeRequest):
     return analyze_pod(
-        pod_details=request.pod_details,
-        pod_logs=request.pod_logs,
-        pod_events=request.pod_events,
+        namespace=request.namespace,
+        pod_name=request.pod_name,
     )
