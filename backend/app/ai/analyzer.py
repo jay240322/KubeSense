@@ -1,11 +1,8 @@
 import json
 
-from app.ai.client import (
-    client,
-    GEMINI_MODEL,
-)
+from app.ai.service import generate_ai_response
 
-from app.ai.prompts import SYSTEM_PROMPT
+from app.ai.prompts import POD_ANALYSIS_PROMPT
 
 from app.kubernetes.pods import (
     get_pod_details,
@@ -33,7 +30,7 @@ def analyze_pod(
     )
 
     prompt = f"""
-{SYSTEM_PROMPT}
+{POD_ANALYSIS_PROMPT}
 
 ## Pod Details
 
@@ -50,11 +47,8 @@ def analyze_pod(
 Please analyze the Kubernetes pod and produce a troubleshooting report.
 """
 
-    response = client.models.generate_content(
-        model=GEMINI_MODEL,
-        contents=prompt,
-    )
+    analysis = generate_ai_response(prompt)
 
     return {
-        "analysis": response.text
+        "analysis": analysis
     }
