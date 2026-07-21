@@ -1,4 +1,5 @@
 import "./AIAnalysis.css";
+import ReactMarkdown from "react-markdown";
 
 type AIAnalysisProps = {
   analysis: string;
@@ -29,9 +30,11 @@ export default function AIAnalysis({
       )}
 
       {!loading && !error && analysis && (
-        <pre className="analysis-text">
-          {analysis}
-        </pre>
+         <div className="analysis-content">
+          <ReactMarkdown>
+          {analysis}            
+          </ReactMarkdown>
+        </div>
       )}
 
     </div>
