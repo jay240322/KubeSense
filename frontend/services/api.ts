@@ -78,3 +78,19 @@ export async function analyzePod(
   }
   return response.json();
 }
+
+export async function analyzeCluster(){
+  const response = await fetch(
+    `${API_BASE}/api/v1/analyze-cluster`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application.json",
+      },
+    }
+  );
+  if(!response.ok){
+    throw new Error("Filed to analyze cluster");
+  }
+  return response.json();
+}

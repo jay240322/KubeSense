@@ -9,8 +9,10 @@ import PodTable from "@/components/podTable/podTable";
 import PodDetails from "@/components/PodDetails/PodDetails";
 import PodLogs from "@/components/PodLogs/PodLogs";
 import PodEvents from "@/components/PodEvents/PodEvents";
+import ClusterAnalysis from "@/components/ClusterAnalysis/ClusterAnalysis";
 
 import usePods from "@/hooks/usePods";
+import useClusterAI from "@/hooks/useClusterAI";
 
 import {
   getPodDetails,
@@ -34,6 +36,15 @@ export default function Home() {
     error,
     refreshPods,
   } = usePods();
+
+  const {
+    analysis: clusterAnalysis,
+    healthScore,
+    pods: analyzedPods,
+    loading: clusterLoading,
+    error: clusterError,
+    analyze: analyzeCluster,
+  } = useClusterAI();
 
   const [search, setSearch] = useState("");
 
@@ -62,7 +73,6 @@ export default function Home() {
       const pod = await getPodDetails(namespace, podName);
 
       setSelectedPod(pod);
-
       setLogs("");
       setEvents([]);
     } catch (error) {
@@ -110,6 +120,43 @@ export default function Home() {
           <RefreshButton onRefresh={refreshPods} />
         </div>
 
+        <div style={{ marginBottom: "20px" }}>
+          <button
+            onClick={analyzeCluster}
+            disabled={clusterLoading}
+          >
+            {clusterLoading
+              ? "🤖 Analyzing Cluster..."
+              : "🤖 Analyze Entire Cluster"}
+          </button>
+        </div>
+
+        {clusterAnalysis && (
+          <div
+            style={{
+              marginBottom: "25px",
+              padding: "20px",
+              borderRadius: "12px",
+              background: "#1f2937",
+              color: "white",
+            }}
+          >
+            <h2>🌐 Cluster Health Dashboard</h2>
+
+            <p>
+              ❤️ <strong>Health Score:</strong> {healthScore}/100
+            </p>
+
+            <p>
+              📦 <strong>Pods Analyzed:</strong> {analyzedPods}
+            </p>
+
+            <p>
+              🕒 <strong>Last Analysis:</strong> Just now
+            </p>
+          </div>
+        )}
+
         {loading && <p>Loading Pods...</p>}
 
         {error && <p>{error}</p>}
@@ -138,6 +185,12 @@ export default function Home() {
                 events={events}
               />
             )}
+
+            <ClusterAnalysis
+              analysis={clusterAnalysis}
+              loading={clusterLoading}
+              error={clusterError}
+            />
           </>
         )}
       </div>
