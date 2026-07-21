@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.models import AnalyzeRequest
-
+from app.ai.cluster_analyzer import analyze_cluster
 from app.ai.analyzer import analyze_pod
 
 from app.kubernetes.pods import (
@@ -72,3 +72,7 @@ def analyze(request: AnalyzeRequest):
         namespace=request.namespace,
         pod_name=request.pod_name,
     )
+
+@app.post("/api/v1/analyze-cluster")
+def analyze_entire_cluster():
+    return analyze_cluster()
