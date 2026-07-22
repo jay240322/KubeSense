@@ -9,15 +9,22 @@ interface Event {
 
 interface PodEventsProps {
     events: Event[];
+    onClose: () => void;
 }
 
 export default function PodEvents({
     events,
+    onClose,
 }: PodEventsProps) {
     if(events.length === 0) {
         return (
             <div className="pod-events">
-                <h2>Pod Events</h2>
+                <div className="pod-events-header">
+                    <h2>Pod Events</h2>
+                    <button className="close-button" onClick={onClose} aria-label="Close events">
+                        ✕
+                    </button>
+                </div>
                 <p>No events available.</p>
             </div>
         );
@@ -25,7 +32,12 @@ export default function PodEvents({
 
     return (
        <div className="pod-events">
-          <h2>Pod events</h2>
+          <div className="pod-events-header">
+             <h2>Pod Events</h2>
+             <button className="close-button" onClick={onClose} aria-label="Close events">
+                 ✕
+             </button>
+          </div>
 
           {events.map((event, index) => (
              <div

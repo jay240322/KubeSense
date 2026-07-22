@@ -30,6 +30,8 @@ interface Event {
   time: string;
 }
 
+type ActiveView = "pod-list" | "pod-details" | "pod-logs" | "pod-events" | "pod-ai" | "cluster-analysis";
+
 export default function Home() {
   const {
     pods,
@@ -55,6 +57,7 @@ export default function Home() {
   } = useAI();
 
   const [activeAnalysisType, setActiveAnalysisType] = useState<"cluster" | "pod" | null>(null);
+  const [activeView, setActiveView] = useState<ActiveView>("pod-list");
 
   const [search, setSearch] = useState("");
 
@@ -85,6 +88,7 @@ export default function Home() {
       setSelectedPod(pod);
       setLogs("");
       setEvents([]);
+      setActiveView("pod-details");
       if (activeAnalysisType === "pod") {
         setActiveAnalysisType(null);
       }
@@ -128,6 +132,7 @@ export default function Home() {
     setSelectedPod(null);
     setLogs("");
     setEvents([]);
+    setActiveView("pod-list");
     if (activeAnalysisType === "pod") {
       setActiveAnalysisType(null);
     }
@@ -140,14 +145,27 @@ export default function Home() {
       <div className="app-container">
         <aside className="sidebar">
           <div className="sidebar-section">
+            <div className="sidebar-section-title">Navigation</div>
+            <div className="sidebar-group">
+              <button
+                className={`sidebar-btn ${activeView === "pod-list" ? "active" : ""}`}
+                onClick={() => setActiveView("pod-list")}
+              >
+                📋 Pod List
+              </button>
+            </div>
+          </div>
+
+          <div className="sidebar-section">
             <div className="sidebar-section-title">Global Actions</div>
             <div className="sidebar-group">
               <button className="sidebar-btn" onClick={refreshPods}>
                 🔄 Refresh Pods
               </button>
               <button
-                className="sidebar-btn ai-btn"
+                className={`sidebar-btn ai-btn ${activeView === "cluster-analysis" ? "active" : ""}`}
                 onClick={() => {
+                  setActiveView("cluster-analysis");
                   setActiveAnalysisType("cluster");
                   analyzeCluster();
                 }}
@@ -161,43 +179,73 @@ export default function Home() {
           {selectedPod && (
             <div className="sidebar-section">
               <div className="sidebar-section-title">Pod Operations</div>
-              <div className="selected-pod-card">
-                <div className="selected-pod-card-header">Selected Pod</div>
+              <div className="selected-pod-card" onClick={() => setActiveView("pod-list")}>
+                <div className="selected-pod-card-header">Selected Pod (Click to List)</div>
                 <div className="selected-pod-name">{selectedPod.name}</div>
                 <div className="selected-pod-namespace">Namespace: {selectedPod.namespace}</div>
-              </div>
-              <div className="sidebar-group">
-                <button
-                  className="sidebar-btn"
-                  onClick={() => handleViewLogs(selectedPod.namespace, selectedPod.name)}
-                >
-                  📜 View Logs
-                </button>
-                <button
-                  className="sidebar-btn"
-                  onClick={() => handleViewEvents(selectedPod.namespace, selectedPod.name)}
-                >
-                  📅 View Events
-                </button>
-                <button
-                  className="sidebar-btn ai-btn"
-                  onClick={() => handleAnalyzePod(selectedPod.namespace, selectedPod.name)}
-                  disabled={podLoading}
-                >
-                  {podLoading ? "🤖 Analyzing..." : "🤖 Analyze with AI"}
-                </button>
+                
+                <div className="selected-pod-subgroup" onClick={(e) => e.stopPropagation()}>
+                  <button
+                    className={`sidebar-btn ${activeView === "pod-details" ? "active" : ""}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActiveView("pod-details");
+                    }}
+                  >
+                    ℹ️ Pod Details
+                  </button>
+                  <button
+                    className={`sidebar-btn ${activeView === "pod-logs" ? "active" : ""}`}
+                    onClick={async (e) => {
+                      e.stopPropagation();
+                      setActiveView("pod-logs");
+                      if (!logs) {
+                        await handleViewLogs(selectedPod.namespace, selectedPod.name);
+                      }
+                    }}
+                  >
+                    📜 View Logs
+                  </button>
+                  <button
+                    className={`sidebar-btn ${activeView === "pod-events" ? "active" : ""}`}
+                    onClick={async (e) => {
+                      e.stopPropagation();
+                      setActiveView("pod-events");
+                      if (events.length === 0) {
+                        await handleViewEvents(selectedPod.namespace, selectedPod.name);
+                      }
+                    }}
+                  >
+                    📅 View Events
+                  </button>
+                  <button
+                    className={`sidebar-btn ai-btn ${activeView === "pod-ai" ? "active" : ""}`}
+                    onClick={async (e) => {
+                      e.stopPropagation();
+                      setActiveView("pod-ai");
+                      if (!podAnalysis) {
+                        await handleAnalyzePod(selectedPod.namespace, selectedPod.name);
+                      }
+                    }}
+                    disabled={podLoading}
+                  >
+                    {podLoading ? "🤖 Analyzing..." : "🤖 Analyze with AI"}
+                  </button>
+                </div>
               </div>
             </div>
           )}
         </aside>
 
         <main className="main-content">
-          <SearchBar
-            search={search}
-            setSearch={setSearch}
-          />
+          {activeView === "pod-list" && (
+            <SearchBar
+              search={search}
+              setSearch={setSearch}
+            />
+          )}
 
-          {clusterAnalysis && (
+          {activeView === "cluster-analysis" && clusterAnalysis && (
             <div
               style={{
                 marginBottom: "25px",
@@ -225,43 +273,57 @@ export default function Home() {
           )}
 
           <div style={{ marginTop: "20px" }}>
-            {loading && <p>Loading Pods...</p>}
-
-            {error && <p>{error}</p>}
-
-            {!loading && !error && (
+            {activeView === "pod-list" && (
               <>
-                <PodTable
-                  pods={filteredPods}
-                  onSelectPod={handleSelectPod}
-                />
-
-                <PodDetails
-                  pod={selectedPod}
-                  onClose={handleClosePodDetails}
-                />
-
-                {logs && (
-                  <PodLogs
-                    logs={logs}
-                  />
-                )}
-
-                {events.length > 0 && (
-                  <PodEvents
-                    events={events}
+                {loading && <p>Loading Pods...</p>}
+                {error && <p>{error}</p>}
+                {!loading && !error && (
+                  <PodTable
+                    pods={filteredPods}
+                    onSelectPod={handleSelectPod}
                   />
                 )}
               </>
             )}
 
-            {activeAnalysisType && (
+            {activeView === "pod-details" && selectedPod && (
+              <PodDetails
+                pod={selectedPod}
+                onClose={handleClosePodDetails}
+              />
+            )}
+
+            {activeView === "pod-logs" && (
+              <PodLogs
+                logs={logs}
+                onClose={handleClosePodDetails}
+              />
+            )}
+
+            {activeView === "pod-events" && (
+              <PodEvents
+                events={events}
+                onClose={handleClosePodDetails}
+              />
+            )}
+
+            {activeView === "pod-ai" && (
               <ClusterAnalysis
-                type={activeAnalysisType}
-                analysis={activeAnalysisType === "cluster" ? clusterAnalysis : podAnalysis}
-                loading={activeAnalysisType === "cluster" ? clusterLoading : podLoading}
-                error={activeAnalysisType === "cluster" ? clusterError : podError}
-                onClose={() => setActiveAnalysisType(null)}
+                type="pod"
+                analysis={podAnalysis}
+                loading={podLoading}
+                error={podError}
+                onClose={handleClosePodDetails}
+              />
+            )}
+
+            {activeView === "cluster-analysis" && (
+              <ClusterAnalysis
+                type="cluster"
+                analysis={clusterAnalysis}
+                loading={clusterLoading}
+                error={clusterError}
+                onClose={handleClosePodDetails}
               />
             )}
           </div>

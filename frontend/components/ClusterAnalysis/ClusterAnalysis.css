@@ -2,7 +2,11 @@
   margin-top: 30px;
   padding: 24px;
   border-radius: 12px;
-  background: #1f2937;
+  background: rgba(31, 41, 55, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   color: #f9fafb;
 }
 
@@ -80,6 +84,13 @@
 }
 
 .analysis-header h2 {
+  font-size: 30px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   margin: 0 !important;
 }
 
@@ -87,12 +98,13 @@
   background: transparent;
   border: none;
   color: #9ca3af;
-  font-size: 20px;
+  font-size: 24px;
   font-weight: bold;
   cursor: pointer;
-  padding: 4px 8px;
+  padding: 4px 10px;
   border-radius: 6px;
   transition: color 0.2s, background-color 0.2s;
+  line-height: 1;
 }
 
 .close-button:hover {
@@ -123,4 +135,34 @@
 
 .low {
   background: #16a34a;
+}
+
+.cluster-analysis h2.markdown-critical-title {
+  color: #ef4444 !important;
+  font-size: 24px !important;
+  font-weight: 800 !important;
+  border-bottom: 1px solid rgba(239, 68, 68, 0.3) !important;
+  padding-bottom: 6px;
+  margin-top: 28px !important;
+  margin-bottom: 16px !important;
+}
+
+.cluster-analysis h2.markdown-warning-title {
+  color: #f97316 !important;
+  font-size: 24px !important;
+  font-weight: 800 !important;
+  border-bottom: 1px solid rgba(249, 115, 22, 0.3) !important;
+  padding-bottom: 6px;
+  margin-top: 28px !important;
+  margin-bottom: 16px !important;
+}
+
+.cluster-analysis h2.markdown-info-title {
+  color: #10b981 !important;
+  font-size: 24px !important;
+  font-weight: 800 !important;
+  border-bottom: 1px solid rgba(16, 185, 129, 0.3) !important;
+  padding-bottom: 6px;
+  margin-top: 28px !important;
+  margin-bottom: 16px !important;
 }

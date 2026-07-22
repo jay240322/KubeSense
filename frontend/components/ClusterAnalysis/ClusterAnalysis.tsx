@@ -96,7 +96,24 @@ export default function ClusterAnalysis({
           </div>
 
           <div className="analysis-content">
-            <ReactMarkdown>
+            <ReactMarkdown
+              components={{
+                h2({ children, ...props }) {
+                  const text = String(children || "");
+                  const lowerText = text.toLowerCase();
+                  if (lowerText.includes("critical issues") || lowerText.includes("root cause")) {
+                    return <h2 className="markdown-critical-title" {...props}>{children}</h2>;
+                  }
+                  if (lowerText.includes("warnings") || lowerText.includes("evidence") || lowerText.includes("severity")) {
+                    return <h2 className="markdown-warning-title" {...props}>{children}</h2>;
+                  }
+                  if (lowerText.includes("recommendations") || lowerText.includes("best practices")) {
+                    return <h2 className="markdown-info-title" {...props}>{children}</h2>;
+                  }
+                  return <h2 {...props}>{children}</h2>;
+                }
+              }}
+            >
               {analysis}
             </ReactMarkdown>
           </div>
