@@ -1,6 +1,4 @@
 import "./PodDetails.css";
-import AIAnalysis from "../AIAnalysis/AIAnalysis";
-import useAI from "@/hooks/useAI";
 
 interface PodDetailsProps {
   pod: {
@@ -13,30 +11,14 @@ interface PodDetailsProps {
     images: string[];
   } | null;
 
-  onViewLogs: (namespace: string, podName: string) => void;
-  onViewEvents: (namespace: string, podName: string) => void;
+  onClose: () => void;
 }
 
 export default function PodDetails({
   pod,
-  onViewLogs,
-  onViewEvents,
+  onClose,
 }: PodDetailsProps) {
-  const {
-    analysis,
-    loading,
-    error,
-    analyze,
-  } = useAI();
 
-  async function handleAnalyze(){
-    if(!pod) return;
-
-    await analyze(
-      pod.namespace,
-      pod.name
-    );
-  }
   if (!pod) {
     return (
       <div className="pod-details">
@@ -48,7 +30,12 @@ export default function PodDetails({
 
   return (
     <div className="pod-details">
-      <h2>Pod Details</h2>
+      <div className="pod-details-header">
+        <h2>Pod Details</h2>
+        <button className="close-button" onClick={onClose} aria-label="Close pod details">
+          ✕
+        </button>
+      </div>
 
       <div className="detail-row">
         <span>Name</span>
@@ -89,36 +76,6 @@ export default function PodDetails({
           ))}
         </ul>
       </div>
-
-      <div className="button-group">
-        <button
-          className="logs-button"
-          onClick={() => onViewLogs(pod.namespace, pod.name)}
-        >
-          📜 View Logs
-        </button>
-
-        <button
-          className="events-button"
-          onClick={() => onViewEvents(pod.namespace, pod.name)}
-        >
-          📅 View Events
-        </button>
-
-        <button
-          className="ai-button"
-          onClick={handleAnalyze}
-          disabled={loading}
-        >
-          {loading ? "🤖 Analyzing..." : "🤖 Analyze with AI"}
-        </button>
-      </div>
-      <AIAnalysis
-      analysis={analysis}
-      loading={loading}
-      error={error}
-      />
-      
     </div>
   );
 }
