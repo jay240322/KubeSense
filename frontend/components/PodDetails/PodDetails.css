@@ -6,8 +6,32 @@
   color: white;
 }
 
-.pod-details h2 {
+.pod-details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
+}
+
+.pod-details h2 {
+  margin: 0 !important;
+}
+
+.close-button {
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.close-button:hover {
+  color: #ffffff;
+  background-color: #334155;
 }
 
 .detail-row {
@@ -37,37 +61,4 @@
 .images-section li {
   margin-bottom: 6px;
   word-break: break-word;
-}
-
-.button-group {
-  display: flex;
-  gap: 15px;
-  margin-top: 25px;
-}
-
-.logs-button,
-.events-button {
-  padding: 12px 20px;
-  border: none;
-  border-radius: 8px;
-  color: white;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: 600;
-}
-
-.logs-button {
-  background: #2563eb;
-}
-
-.logs-button:hover {
-  background: #1d4ed8;
-}
-
-.events-button {
-  background: #9333ea;
-}
-
-.events-button:hover {
-  background: #7e22ce;
 }
