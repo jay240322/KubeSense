@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: kubesense-backend
+  namespace: kubesense
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: kubesense-backend
+
+  template:
+    metadata:
+      labels:
+        app: kubesense-backend
+
+    spec:
+      containers:
+        - name: backend
+
+          image: joypatel2403/kubesense-backend:latest
+
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 8000
+
+          env:
+            - name: GOOGLE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: kubesense-secret
+                  key: GOOGLE_API_KEY
+
+            - name: GEMINI_MODEL
+              valueFrom:
+                configMapKeyRef:
+                  name: kubesense-config
+                  key: GEMINI_MODEL

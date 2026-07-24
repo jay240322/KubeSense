@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: kubesense-frontend
+  namespace: kubesense
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: kubesense-frontend
+
+  template:
+    metadata:
+      labels:
+        app: kubesense-frontend
+
+    spec:
+      containers:
+        - name: frontend
+          image: joypatel2403/kubesense-frontend:latest
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 3000
