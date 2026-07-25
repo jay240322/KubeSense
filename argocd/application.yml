@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+metadata:
+  name: kubesense
+  namespace: argocd
+
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/jay240322/KubeSense.git
+    targetRevision: develop
+    path: k8s
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kubesense
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+    syncOptions:
+      - CreateNamespace=true
