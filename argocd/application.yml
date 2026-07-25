@@ -11,7 +11,7 @@ spec:
   source:
     repoURL: https://github.com/jay240322/KubeSense.git
     targetRevision: develop
-    path: k8s
+    path: k8s/overlays/dev
 
   destination:
     server: https://kubernetes.default.svc
