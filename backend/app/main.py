@@ -1,6 +1,14 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.database import Base, engine
+
+# Import SQLAlchemy models
+from app.models.user import User
+
+# Create database tables
+Base.metadata.create_all(bind=engine)
+
 from app.models import AnalyzeRequest
 from app.ai.cluster_analyzer import analyze_cluster
 from app.ai.analyzer import analyze_pod
