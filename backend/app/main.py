@@ -1,15 +1,22 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.database import Base, engine
+from sqlalchemy import text
+from sqlalchemy.orm import Session
 
-# Import SQLAlchemy models
+from app.database import Base, engine, get_db
+
+# Register SQLAlchemy models
 from app.models.user import User
 
 # Create database tables
-Base.metadata.create_all(bind=engine)
+try:
+    Base.metadata.create_all(bind=engine)
+    print("✅ Database tables created successfully.")
+except Exception as e:
+    print(f"❌ Database connection error: {e}")
 
-from app.models import AnalyzeRequest
+from app.schemas import AnalyzeRequest
 from app.ai.cluster_analyzer import analyze_cluster
 from app.ai.analyzer import analyze_pod
 
@@ -52,6 +59,23 @@ def health():
     }
 
 
+@app.get("/db-health")
+def database_health(db: Session = Depends(get_db)):
+    try:
+        db.execute(text("SELECT 1"))
+
+        return {
+            "status": "connected",
+            "database": "PostgreSQL"
+        }
+
+    except Exception as e:
+        return {
+            "status": "failed",
+            "error": str(e)
+        }
+
+
 @app.get("/api/v1/pods")
 def get_pods():
     return {
@@ -80,6 +104,7 @@ def analyze(request: AnalyzeRequest):
         namespace=request.namespace,
         pod_name=request.pod_name,
     )
+
 
 @app.post("/api/v1/analyze-cluster")
 def analyze_entire_cluster():
