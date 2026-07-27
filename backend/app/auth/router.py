@@ -4,10 +4,17 @@ from fastapi import HTTPException
 
 from sqlalchemy.orm import Session
 
-from app.auth.schemas import RegisterRequest
-from app.auth.service import register_user
-
 from app.database import get_db
+
+from app.auth.schemas import (
+    RegisterRequest,
+    LoginRequest,
+)
+
+from app.auth.service import (
+    register_user,
+    login_user,
+)
 
 router = APIRouter(
     prefix="/api/v1/auth",
@@ -22,10 +29,10 @@ def register(
 ):
     try:
         user = register_user(
-            db,
-            request.username,
-            request.email,
-            request.password,
+            db=db,
+            username=request.username,
+            email=request.email,
+            password=request.password,
         )
 
         return {
@@ -40,5 +47,29 @@ def register(
     except ValueError as e:
         raise HTTPException(
             status_code=400,
+            detail=str(e),
+        )
+
+
+@router.post("/login")
+def login(
+    request: LoginRequest,
+    db: Session = Depends(get_db),
+):
+    try:
+        token = login_user(
+            db=db,
+            email=request.email,
+            password=request.password,
+        )
+
+        return {
+            "access_token": token,
+            "token_type": "bearer",
+        }
+
+    except ValueError as e:
+        raise HTTPException(
+            status_code=401,
             detail=str(e),
         )
