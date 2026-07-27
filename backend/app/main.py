@@ -16,7 +16,7 @@ from app.auth.router import router as auth_router
 from app.schemas import AnalyzeRequest
 from app.ai.cluster_analyzer import analyze_cluster
 from app.ai.analyzer import analyze_pod
-
+from app.auth.dependencies import get_current_user
 # Kubernetes Functions
 from app.kubernetes.pods import (
     list_pods,
@@ -108,13 +108,19 @@ def pod_events(namespace: str, pod_name: str):
 
 
 @app.post("/api/v1/analyze")
-def analyze(request: AnalyzeRequest):
+def analyze(
+    request: AnalyzeRequest,
+    current_user=Depends(get_current_user),
+):
+
     return analyze_pod(
         namespace=request.namespace,
         pod_name=request.pod_name,
     )
 
-
 @app.post("/api/v1/analyze-cluster")
-def analyze_entire_cluster():
+def analyze_entire_cluster(
+    current_user=Depends(get_current_user),
+):
+
     return analyze_cluster()
