@@ -6,8 +6,24 @@ from sqlalchemy.orm import Session
 
 from app.database import Base, engine, get_db
 
-# Register SQLAlchemy models
+# SQLAlchemy Models
 from app.models.user import User
+
+# Authentication Router
+from app.auth.router import router as auth_router
+
+# AI Models
+from app.schemas import AnalyzeRequest
+from app.ai.cluster_analyzer import analyze_cluster
+from app.ai.analyzer import analyze_pod
+
+# Kubernetes Functions
+from app.kubernetes.pods import (
+    list_pods,
+    get_pod_details,
+    get_pod_logs,
+    get_pod_events,
+)
 
 # Create database tables
 try:
@@ -16,22 +32,12 @@ try:
 except Exception as e:
     print(f"❌ Database connection error: {e}")
 
-from app.schemas import AnalyzeRequest
-from app.ai.cluster_analyzer import analyze_cluster
-from app.ai.analyzer import analyze_pod
-
-from app.kubernetes.pods import (
-    list_pods,
-    get_pod_details,
-    get_pod_logs,
-    get_pod_events,
-)
-
 app = FastAPI(
     title="KubeSense API",
     version="0.1.0"
 )
 
+# CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -41,6 +47,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Register Routers
+app.include_router(auth_router)
 
 
 @app.get("/")
