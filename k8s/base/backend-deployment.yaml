@@ -18,6 +18,8 @@ spec:
         app: kubesense-backend
 
     spec:
+      serviceAccountName: kubesense-backend
+
       containers:
         - name: backend
 
