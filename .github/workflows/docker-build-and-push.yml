@@ -73,9 +73,9 @@ jobs:
 
       - name: Update Kustomize Image Tags
         run: |
-          sed -i "/joypatel2403\/kubesense-backend/{n;s/newTag:.*/newTag: ${IMAGE_TAG}/;}" k8s/overlays/dev/kustomization.yaml
+          sed -i "/joypatel2403\/kubesense-backend/{n;s/newTag:.*/newTag: \"${IMAGE_TAG}\"/;}" k8s/overlays/dev/kustomization.yaml
 
-          sed -i "/joypatel2403\/kubesense-frontend/{n;s/newTag:.*/newTag: ${IMAGE_TAG}/;}" k8s/overlays/dev/kustomization.yaml
+          sed -i "/joypatel2403\/kubesense-frontend/{n;s/newTag:.*/newTag: \"${IMAGE_TAG}\"/;}" k8s/overlays/dev/kustomization.yaml
 
       - name: Commit Changes
         run: |
