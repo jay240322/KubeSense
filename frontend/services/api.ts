@@ -1,96 +1,88 @@
 const API_BASE = "http://127.0.0.1:8000";
 
-export async function getPods() {
-  const response = await fetch(`${API_BASE}/api/v1/pods`);
+function getAuthHeaders() {
+  const token = localStorage.getItem("token");
+
+  return {
+    "Content-Type": "application/json",
+    ...(token && {
+      Authorization: `Bearer ${token}`,
+    }),
+  };
+}
+
+async function apiRequest(
+  endpoint: string,
+  options: RequestInit = {}
+) {
+  const response = await fetch(`${API_BASE}${endpoint}`, {
+    ...options,
+    headers: {
+      ...getAuthHeaders(),
+      ...(options.headers || {}),
+    },
+  });
+
+  if (response.status === 401) {
+    localStorage.removeItem("token");
+
+    window.location.href = "/";
+    throw new Error("Unauthorized");
+  }
 
   if (!response.ok) {
-    throw new Error("Failed to fetch pods");
+    throw new Error(await response.text());
   }
 
   return response.json();
+}
+
+export async function getPods() {
+  return apiRequest("/api/v1/pods");
 }
 
 export async function getPodDetails(
   namespace: string,
   podName: string
 ) {
-  const response = await fetch(
-    `${API_BASE}/api/v1/pods/${namespace}/${podName}`
+  return apiRequest(
+    `/api/v1/pods/${namespace}/${podName}`
   );
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch pod details");
-  }
-
-  return response.json();
 }
 
 export async function getPodLogs(
   namespace: string,
   podName: string
 ) {
-  const response = await fetch(
-    `${API_BASE}/api/v1/pods/${namespace}/${podName}/logs`
+  return apiRequest(
+    `/api/v1/pods/${namespace}/${podName}/logs`
   );
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch pod logs");
-  }
-
-  return response.json();
 }
 
 export async function getPodEvents(
   namespace: string,
   podName: string
-){
-  const response = await fetch (
-    `${API_BASE}/api/v1/pods/${namespace}/${podName}/events`
+) {
+  return apiRequest(
+    `/api/v1/pods/${namespace}/${podName}/events`
   );
-
-  if(!response.ok) {
-    throw new Error("failed to fetch pod events");
-  }
-
-  return response.json();
 }
 
 export async function analyzePod(
-   namespace: string,
+  namespace: string,
   podName: string
-){
-  const response = await fetch(
-    `${API_BASE}/api/v1/analyze`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        namespace: namespace,
-        pod_name: podName,
-      }),
-    }
-  );
-
-  if(!response.ok){
-    throw new Error("Faailed to analyze pod");
-  }
-  return response.json();
+) {
+  return apiRequest("/api/v1/analyze", {
+    method: "POST",
+    body: JSON.stringify({
+      namespace,
+      pod_name: podName,
+    }),
+  });
 }
 
-export async function analyzeCluster(){
-  const response = await fetch(
-    `${API_BASE}/api/v1/analyze-cluster`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application.json",
-      },
-    }
-  );
-  if(!response.ok){
-    throw new Error("Filed to analyze cluster");
-  }
-  return response.json();
+export async function analyzeCluster() {
+  return apiRequest("/api/v1/analyze-cluster", {
+    method: "POST",
+  });
 }
