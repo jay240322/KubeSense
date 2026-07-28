@@ -9,7 +9,7 @@ export default function LoginForm() {
   const router = useRouter();
   const { login } = useAuth();
 
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const [loading, setLoading] = useState(false);
@@ -30,7 +30,7 @@ export default function LoginForm() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            email,
+            username,
             password,
           }),
         }
@@ -45,28 +45,35 @@ export default function LoginForm() {
       login(data.access_token);
 
       router.push("/dashboard");
-
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Something went wrong"
+      );
     }
 
     setLoading(false);
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
-
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-5"
+    >
       <div>
         <label className="block text-sm text-slate-300 mb-2">
-          Email
+          Username
         </label>
 
         <input
-          type="email"
-          placeholder="Enter your email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          type="text"
+          placeholder="Enter your username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           className="w-full rounded-xl border border-slate-700 bg-slate-800 p-3 text-white outline-none focus:border-indigo-500"
+          autoComplete="username"
+          required
         />
       </div>
 
@@ -81,11 +88,13 @@ export default function LoginForm() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="w-full rounded-xl border border-slate-700 bg-slate-800 p-3 text-white outline-none focus:border-indigo-500"
+          autoComplete="current-password"
+          required
         />
       </div>
 
       {error && (
-        <div className="rounded-lg bg-red-500/10 border border-red-500 p-3 text-red-400">
+        <div className="rounded-lg border border-red-500 bg-red-500/10 p-3 text-red-400">
           {error}
         </div>
       )}
@@ -93,11 +102,10 @@ export default function LoginForm() {
       <button
         type="submit"
         disabled={loading}
-        className="w-full rounded-xl bg-indigo-600 py-3 font-semibold text-white transition hover:bg-indigo-700"
+        className="w-full rounded-xl bg-indigo-600 py-3 font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {loading ? "Signing In..." : "Sign In"}
       </button>
-
     </form>
   );
 }
