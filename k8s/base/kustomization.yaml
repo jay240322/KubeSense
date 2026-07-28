@@ -13,6 +13,7 @@ resources:
   # Configuration
   - configmap.yaml
   - secret.yaml
+  - auth-secret.yaml
 
   # PostgreSQL
   - postgres-secret.yaml

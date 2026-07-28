@@ -24,14 +24,15 @@ spec:
         - name: backend
 
           image: joypatel2403/kubesense-backend:latest
-
           imagePullPolicy: Always
 
           ports:
             - containerPort: 8000
 
           env:
+
             # Gemini Configuration
+
             - name: GOOGLE_API_KEY
               valueFrom:
                 secretKeyRef:
@@ -45,6 +46,7 @@ spec:
                   key: GEMINI_MODEL
 
             # PostgreSQL Configuration
+
             - name: POSTGRES_HOST
               value: postgres-service
 
@@ -68,3 +70,17 @@ spec:
                 secretKeyRef:
                   name: postgres-secret
                   key: POSTGRES_PASSWORD
+
+            # KubeSense Authentication
+
+            - name: KUBESENSE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kubesense-auth
+                  key: KUBESENSE_USERNAME
+
+            - name: KUBESENSE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kubesense-auth
+                  key: KUBESENSE_PASSWORD
