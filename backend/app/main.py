@@ -13,6 +13,7 @@ from app.database import (
 
 # SQLAlchemy Models
 from app.models.user import User
+from app.models.settings import Settings
 
 # Authentication
 from app.auth.router import router as auth_router
