@@ -1,7 +1,6 @@
 "use client";
 
 import LoginForm from "@/components/auth/LoginForm";
-const [showGeminiModal, setShowGeminiModal] = useState(false);
 
 export default function Home() {
   return (
