@@ -1,10 +1,14 @@
+from sqlalchemy.orm import Session
+
 from app.kubernetes.client import get_k8s_client
 from app.kubernetes.pods import get_pod_events
 from app.ai.prompts import CLUSTER_ANALYSIS_PROMPT
 from app.ai.service import generate_ai_response
 
 
-def analyze_cluster():
+def analyze_cluster(
+    db: Session,
+):
     api = get_k8s_client()
 
     pods = api.list_pod_for_all_namespaces().items
@@ -45,10 +49,13 @@ Cluster Summary:
 {cluster_summary}
 """
 
-    analysis = generate_ai_response(prompt)
+    analysis = generate_ai_response(
+        db=db,
+        prompt=prompt,
+    )
 
     return {
-       "health_score": 20,  # Temporary, we'll calculate this dynamically later
+        "health_score": 20,  # Temporary, we'll calculate this dynamically later
         "pods": len(cluster_summary),
         "analysis": analysis,
     }

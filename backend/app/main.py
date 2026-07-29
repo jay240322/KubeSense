@@ -24,6 +24,7 @@ from app.auth.bootstrap import create_default_user
 from app.schemas import AnalyzeRequest
 from app.ai.cluster_analyzer import analyze_cluster
 from app.ai.analyzer import analyze_pod
+from app.settings.router import router as settings_router
 
 # Kubernetes
 from app.kubernetes.pods import (
@@ -71,6 +72,8 @@ app.add_middleware(
 # Routers
 
 app.include_router(auth_router)
+
+app.include_router(settings_router)
 
 # Basic Endpoints
 
@@ -152,16 +155,23 @@ def pod_events(
 @app.post("/api/v1/analyze")
 def analyze(
     request: AnalyzeRequest,
+    db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
     return analyze_pod(
+        db=db,
         namespace=request.namespace,
         pod_name=request.pod_name,
     )
 
 
+from sqlalchemy.orm import Session
+
 @app.post("/api/v1/analyze-cluster")
 def analyze_entire_cluster(
+    db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
-    return analyze_cluster()
+    return analyze_cluster(
+        db=db,
+    )

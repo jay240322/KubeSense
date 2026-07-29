@@ -1,7 +1,9 @@
 import json
 
-from app.ai.service import generate_ai_response
+from fastapi import HTTPException
+from sqlalchemy.orm import Session
 
+from app.ai.service import generate_ai_response
 from app.ai.prompts import POD_ANALYSIS_PROMPT
 
 from app.kubernetes.pods import (
@@ -10,7 +12,9 @@ from app.kubernetes.pods import (
     get_pod_events,
 )
 
+
 def analyze_pod(
+    db: Session,
     namespace: str,
     pod_name: str,
 ):
@@ -26,7 +30,7 @@ def analyze_pod(
 
     pod_events = get_pod_events(
         namespace,
-        pod_name
+        pod_name,
     )
 
     prompt = f"""
@@ -47,8 +51,19 @@ def analyze_pod(
 Please analyze the Kubernetes pod and produce a troubleshooting report.
 """
 
-    analysis = generate_ai_response(prompt)
+    try:
+        analysis = generate_ai_response(
+            db=db,
+            prompt=prompt,
+        )
+    except Exception as e:
+        print(f"Pod analysis failed: {e}")
+
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to analyze pod using AI.",
+        )
 
     return {
-        "analysis": analysis
+        "analysis": analysis,
     }

@@ -5,13 +5,11 @@ from google import genai
 
 load_dotenv()
 
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-
 GEMINI_MODEL = os.getenv(
     "GEMINI_MODEL",
-    "gemini-3.5-flash"
+    "gemini-3.5-flash",
 )
 
-client = genai.Client(
-    api_key=GOOGLE_API_KEY
-)
+
+def get_gemini_client(api_key: str):
+    return genai.Client(api_key=api_key)

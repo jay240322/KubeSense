@@ -86,3 +86,15 @@ export async function analyzeCluster() {
     method: "POST",
   });
 }
+export async function getGeminiSettings() {
+  return apiRequest("/api/v1/settings");
+}
+
+export async function saveGeminiApiKey(apiKey: string) {
+  return apiRequest("/api/v1/settings/gemini", {
+    method: "POST",
+    body: JSON.stringify({
+      gemini_api_key: apiKey,
+    }),
+  });
+}
