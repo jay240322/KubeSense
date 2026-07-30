@@ -6,7 +6,7 @@ resources:
 
 images:
   - name: joypatel2403/kubesense-backend
-    newTag: "d08133f"
+    newTag: "5350905"
 
   - name: joypatel2403/kubesense-frontend
-    newTag: "d08133f"
+    newTag: "5350905"
