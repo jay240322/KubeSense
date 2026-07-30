@@ -29,7 +29,7 @@ export default function LoginForm() {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/api/v1/auth/login",
+        "/api/v1/auth/login",
         {
           method: "POST",
           headers: {
@@ -55,7 +55,7 @@ export default function LoginForm() {
       if (username === "admin" && password === "KubeSense@123") {
         // Fetch current settings to see if Gemini is already configured
         try {
-          const settingsRes = await fetch("http://localhost:8000/api/v1/settings", {
+          const settingsRes = await fetch("/api/v1/settings", {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${data.access_token}`,
@@ -92,7 +92,7 @@ export default function LoginForm() {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        "http://localhost:8000/api/v1/settings/gemini",
+        "/api/v1/settings/gemini",
         {
           method: "POST",
           headers: {
