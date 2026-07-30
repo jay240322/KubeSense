@@ -38,7 +38,7 @@ async function apiRequest(
 }
 
 export async function getPods() {
-  return apiRequest("/api/v1/pods");
+  return apiRequest("/v1/pods");
 }
 
 export async function getPodDetails(
@@ -46,7 +46,7 @@ export async function getPodDetails(
   podName: string
 ) {
   return apiRequest(
-    `/api/v1/pods/${namespace}/${podName}`
+    `/v1/pods/${namespace}/${podName}`
   );
 }
 
@@ -55,7 +55,7 @@ export async function getPodLogs(
   podName: string
 ) {
   return apiRequest(
-    `/api/v1/pods/${namespace}/${podName}/logs`
+    `/v1/pods/${namespace}/${podName}/logs`
   );
 }
 
@@ -64,7 +64,7 @@ export async function getPodEvents(
   podName: string
 ) {
   return apiRequest(
-    `/api/v1/pods/${namespace}/${podName}/events`
+    `/v1/pods/${namespace}/${podName}/events`
   );
 }
 
@@ -72,7 +72,7 @@ export async function analyzePod(
   namespace: string,
   podName: string
 ) {
-  return apiRequest("/api/v1/analyze", {
+  return apiRequest("/v1/analyze", {
     method: "POST",
     body: JSON.stringify({
       namespace,
@@ -82,16 +82,16 @@ export async function analyzePod(
 }
 
 export async function analyzeCluster() {
-  return apiRequest("/api/v1/analyze-cluster", {
+  return apiRequest("/v1/analyze-cluster", {
     method: "POST",
   });
 }
 export async function getGeminiSettings() {
-  return apiRequest("/api/v1/settings");
+  return apiRequest("/v1/settings");
 }
 
 export async function saveGeminiApiKey(apiKey: string) {
-  return apiRequest("/api/v1/settings/gemini", {
+  return apiRequest("/v1/settings/gemini", {
     method: "POST",
     body: JSON.stringify({
       gemini_api_key: apiKey,
