@@ -166,7 +166,7 @@ export default function Home() {
                 }`}
                 onClick={() => setActiveView("pod-list")}
               >
-                📋 Pod List
+                <i className="fa-solid fa-list-check sidebar-btn-icon"></i> Pod List
               </button>
             </div>
           </div>
@@ -175,7 +175,7 @@ export default function Home() {
             <div className="sidebar-section-title">Global Actions</div>
             <div className="sidebar-group">
               <button className="sidebar-btn" onClick={refreshPods}>
-                🔄 Refresh Pods
+                <i className="fa-solid fa-arrows-rotate sidebar-btn-icon"></i> Refresh Pods
               </button>
 
               <button
@@ -185,7 +185,15 @@ export default function Home() {
                 onClick={handleAnalyzeCluster}
                 disabled={clusterLoading}
               >
-                {clusterLoading ? "🤖 Analyzing..." : "🤖 Analyze Cluster"}
+                {clusterLoading ? (
+                  <>
+                    <i className="fa-solid fa-circle-notch fa-spin sidebar-btn-icon"></i> Analyzing...
+                  </>
+                ) : (
+                  <>
+                    <i className="fa-solid fa-circle-nodes sidebar-btn-icon"></i> Analyze Cluster
+                  </>
+                )}
               </button>
             </div>
           </div>
@@ -221,7 +229,7 @@ export default function Home() {
                       setActiveView("pod-details");
                     }}
                   >
-                    ℹ️ Pod Details
+                    <i className="fa-solid fa-circle-info sidebar-btn-icon"></i> Pod Details
                   </button>
 
                   <button
@@ -240,7 +248,7 @@ export default function Home() {
                       }
                     }}
                   >
-                    📜 View Logs
+                    <i className="fa-solid fa-terminal sidebar-btn-icon"></i> View Logs
                   </button>
 
                   <button
@@ -259,7 +267,7 @@ export default function Home() {
                       }
                     }}
                   >
-                    📅 View Events
+                    <i className="fa-regular fa-bell sidebar-btn-icon"></i> View Events
                   </button>
 
                   <button
@@ -277,7 +285,15 @@ export default function Home() {
                     }}
                     disabled={podLoading}
                   >
-                    {podLoading ? "🤖 Analyzing..." : "🤖 Analyze with AI"}
+                    {podLoading ? (
+                      <>
+                        <i className="fa-solid fa-circle-notch fa-spin sidebar-btn-icon"></i> Analyzing...
+                      </>
+                    ) : (
+                      <>
+                        <i className="fa-solid fa-brain sidebar-btn-icon"></i> Analyze with AI
+                      </>
+                    )}
                   </button>
                 </div>
               </div>
@@ -291,26 +307,43 @@ export default function Home() {
           )}
 
           {activeView === "cluster-analysis" && clusterAnalysis && (
-            <div
-              style={{
-                marginBottom: "25px",
-                marginTop: "20px",
-                padding: "20px",
-                borderRadius: "12px",
-                background: "#1f2937",
-                color: "white",
-              }}
-            >
-              <h2>🌐 Cluster Health Dashboard</h2>
-              <p>
-                ❤️ <strong>Health Score:</strong> {healthScore}/100
-              </p>
-              <p>
-                📦 <strong>Pods Analyzed:</strong> {analyzedPods}
-              </p>
-              <p>
-                🕒 <strong>Last Analysis:</strong> Just now
-              </p>
+            <div className="cluster-health-summary">
+              <div className="summary-header">
+                <h2>
+                  <i className="fa-solid fa-circle-nodes"></i> Cluster Health Dashboard
+                </h2>
+              </div>
+              <div className="summary-grid">
+                <div className="summary-card">
+                  <div className="card-icon health-heart">
+                    <i className="fa-solid fa-heart-pulse"></i>
+                  </div>
+                  <div className="card-info">
+                    <span className="card-label">Health Score</span>
+                    <span className="card-value">{healthScore}/100</span>
+                  </div>
+                </div>
+
+                <div className="summary-card">
+                  <div className="card-icon analyzed-pods">
+                    <i className="fa-solid fa-cubes"></i>
+                  </div>
+                  <div className="card-info">
+                    <span className="card-label">Pods Analyzed</span>
+                    <span className="card-value">{analyzedPods}</span>
+                  </div>
+                </div>
+
+                <div className="summary-card">
+                  <div className="card-icon last-analysis">
+                    <i className="fa-solid fa-clock"></i>
+                  </div>
+                  <div className="card-info">
+                    <span className="card-label">Last Analysis</span>
+                    <span className="card-value">Just now</span>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 

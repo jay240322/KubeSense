@@ -137,36 +137,40 @@ export default function LoginForm() {
     return (
       <form
         onSubmit={handleApiKeySubmit}
-        className="space-y-6 animate-fade-in"
+        className="login-form animate-fade-in"
       >
         <div className="text-center mb-6">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-indigo-500/10 text-indigo-400 mb-3 border border-indigo-500/20">
-            🔑
+          <div className="login-step-icon-wrapper">
+            <i className="fa-solid fa-key"></i>
           </div>
-          <h2 className="text-xl font-bold text-white">Configure Gemini API Key</h2>
-          <p className="text-slate-400 text-sm mt-1">
+          <h2 className="login-step-title">Configure Gemini API Key</h2>
+          <p className="login-step-desc">
             Since you are using the default admin credentials, configure your Gemini API key to enable AI cluster insights.
           </p>
         </div>
 
-        <div>
-          <label className="block text-sm text-slate-300 mb-2">
+        <div className="form-group">
+          <label className="form-label">
             Gemini API Key
           </label>
-          <input
-            type="password"
-            placeholder="Enter Gemini API Key"
-            value={apiKey}
-            onChange={(e) => setApiKey(e.target.value)}
-            className="w-full rounded-xl border border-slate-700 bg-slate-800 p-3 text-white outline-none focus:border-indigo-500 placeholder-slate-500 text-sm"
-            required={!isAlreadyConfigured}
-            autoFocus
-          />
+          <div className="form-input-wrapper">
+            <i className="fa-solid fa-key form-input-icon"></i>
+            <input
+              type="password"
+              placeholder="Enter Gemini API Key"
+              value={apiKey}
+              onChange={(e) => setApiKey(e.target.value)}
+              className="form-input"
+              required={!isAlreadyConfigured}
+              autoFocus
+            />
+          </div>
         </div>
 
         {apiKeyError && (
-          <div className="rounded-lg border border-red-500 bg-red-500/10 p-3 text-red-400 text-xs">
-            {apiKeyError}
+          <div className="form-error">
+            <i className="fa-solid fa-circle-exclamation"></i>
+            <span>{apiKeyError}</span>
           </div>
         )}
 
@@ -174,15 +178,23 @@ export default function LoginForm() {
           <button
             type="submit"
             disabled={apiKeyLoading}
-            className="w-full rounded-xl bg-indigo-600 py-3 font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60 text-sm cursor-pointer"
+            className="form-submit-btn"
           >
-            {apiKeyLoading ? "Verifying & Saving..." : "Save & Continue"}
+            {apiKeyLoading ? (
+              <>
+                <i className="fa-solid fa-spinner fa-spin"></i> Verifying...
+              </>
+            ) : (
+              <>
+                <i className="fa-solid fa-circle-check"></i> Save & Continue
+              </>
+            )}
           </button>
 
           <button
             type="button"
             onClick={() => router.push("/dashboard")}
-            className="w-full rounded-xl border border-slate-700 py-3 font-semibold text-slate-300 transition hover:bg-slate-800 text-sm cursor-pointer"
+            className="form-secondary-btn"
           >
             {isAlreadyConfigured ? "Skip to Dashboard" : "Skip for Now"}
           </button>
@@ -194,52 +206,65 @@ export default function LoginForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-5"
+      className="login-form"
     >
-      <div>
-        <label className="block text-sm text-slate-300 mb-2">
+      <div className="form-group">
+        <label className="form-label">
           Username
         </label>
-
-        <input
-          type="text"
-          placeholder="Enter your username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="w-full rounded-xl border border-slate-700 bg-slate-800 p-3 text-white outline-none focus:border-indigo-500 text-sm"
-          autoComplete="username"
-          required
-        />
+        <div className="form-input-wrapper">
+          <i className="fa-solid fa-user form-input-icon"></i>
+          <input
+            type="text"
+            placeholder="Enter your username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="form-input"
+            autoComplete="username"
+            required
+          />
+        </div>
       </div>
 
-      <div>
-        <label className="block text-sm text-slate-300 mb-2">
+      <div className="form-group">
+        <label className="form-label">
           Password
         </label>
-
-        <input
-          type="password"
-          placeholder="Enter your password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full rounded-xl border border-slate-700 bg-slate-800 p-3 text-white outline-none focus:border-indigo-500 text-sm"
-          autoComplete="current-password"
-          required
-        />
+        <div className="form-input-wrapper">
+          <i className="fa-solid fa-lock form-input-icon"></i>
+          <input
+            type="password"
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="form-input"
+            autoComplete="current-password"
+            required
+          />
+        </div>
       </div>
 
       {error && (
-        <div className="rounded-lg border border-red-500 bg-red-500/10 p-3 text-red-400 text-sm">
-          {error}
+        <div className="form-error">
+          <i className="fa-solid fa-circle-exclamation"></i>
+          <span>{error}</span>
         </div>
       )}
 
       <button
         type="submit"
         disabled={loading}
-        className="w-full rounded-xl bg-indigo-600 py-3 font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60 text-sm cursor-pointer"
+        className="form-submit-btn"
       >
-        {loading ? "Signing In..." : "Sign In"}
+        {loading ? (
+          <>
+            <i className="fa-solid fa-spinner fa-spin"></i> Signing In...
+          </>
+        ) : (
+          <>
+            <i className="fa-solid fa-right-to-bracket"></i> Sign In
+          </>
+        )}
       </button>
     </form>
   );

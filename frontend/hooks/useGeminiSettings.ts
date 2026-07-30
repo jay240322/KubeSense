@@ -8,6 +8,7 @@ import {
 export default function useGeminiSettings() {
   const [loading, setLoading] = useState(false);
   const [configured, setConfigured] = useState(false);
+  const [apiKey, setApiKey] = useState("");
   const [error, setError] = useState("");
 
   async function checkConfiguration() {
@@ -18,6 +19,7 @@ export default function useGeminiSettings() {
       const result = await getGeminiSettings();
 
       setConfigured(result.geminiConfigured);
+      setApiKey(result.geminiApiKey || "");
 
       return result.geminiConfigured;
     } catch (err) {
@@ -37,6 +39,7 @@ export default function useGeminiSettings() {
       await saveGeminiApiKey(apiKey);
 
       setConfigured(true);
+      setApiKey(apiKey);
 
       return true;
     } catch (err) {
@@ -51,6 +54,7 @@ export default function useGeminiSettings() {
   return {
     loading,
     configured,
+    apiKey,
     error,
     checkConfiguration,
     save,

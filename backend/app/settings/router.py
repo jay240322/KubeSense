@@ -27,7 +27,8 @@ def get_settings(
         "geminiConfigured": (
             settings is not None
             and bool(settings.gemini_api_key)
-        )
+        ),
+        "geminiApiKey": settings.gemini_api_key if settings else ""
     }
 
 

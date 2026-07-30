@@ -33,7 +33,7 @@ export default function PodDetails({
       <div className="pod-details-header">
         <h2>Pod Details</h2>
         <button className="close-button" onClick={onClose} aria-label="Close pod details">
-          ✕
+          <i className="fa-solid fa-xmark"></i>
         </button>
       </div>
 
