@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, Header
 from fastapi.middleware.cors import CORSMiddleware
 
 from sqlalchemy import text
@@ -158,11 +158,13 @@ def analyze(
     request: AnalyzeRequest,
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
+    x_gemini_api_key: str | None = Header(None),
 ):
     return analyze_pod(
         db=db,
         namespace=request.namespace,
         pod_name=request.pod_name,
+        api_key=x_gemini_api_key,
     )
 
 
@@ -172,7 +174,9 @@ from sqlalchemy.orm import Session
 def analyze_entire_cluster(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
+    x_gemini_api_key: str | None = Header(None),
 ):
     return analyze_cluster(
         db=db,
+        api_key=x_gemini_api_key,
     )

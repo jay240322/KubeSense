@@ -2,11 +2,15 @@ const API_BASE = "/api";
 
 function getAuthHeaders() {
   const token = localStorage.getItem("token");
+  const geminiApiKey = localStorage.getItem("gemini_api_key");
 
   return {
     "Content-Type": "application/json",
     ...(token && {
       Authorization: `Bearer ${token}`,
+    }),
+    ...(geminiApiKey && {
+      "X-Gemini-API-Key": geminiApiKey,
     }),
   };
 }

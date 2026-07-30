@@ -8,6 +8,7 @@ from app.ai.service import generate_ai_response
 
 def analyze_cluster(
     db: Session,
+    api_key: str | None = None,
 ):
     api = get_k8s_client()
 
@@ -52,6 +53,7 @@ Cluster Summary:
     analysis = generate_ai_response(
         db=db,
         prompt=prompt,
+        api_key=api_key,
     )
 
     return {
