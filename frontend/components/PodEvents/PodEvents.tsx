@@ -22,7 +22,7 @@ export default function PodEvents({
                 <div className="pod-events-header">
                     <h2>Pod Events</h2>
                     <button className="close-button" onClick={onClose} aria-label="Close events">
-                        ✕
+                        <i className="fa-solid fa-xmark"></i>
                     </button>
                 </div>
                 <p>No events available.</p>
@@ -35,7 +35,7 @@ export default function PodEvents({
           <div className="pod-events-header">
              <h2>Pod Events</h2>
              <button className="close-button" onClick={onClose} aria-label="Close events">
-                 ✕
+                 <i className="fa-solid fa-xmark"></i>
              </button>
           </div>
 

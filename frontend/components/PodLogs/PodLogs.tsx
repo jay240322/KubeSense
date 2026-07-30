@@ -14,7 +14,7 @@ export default function PodLogs({
             <div className="pod-logs-header">
                 <h2>Pod Logs</h2>
                 <button className="close-button" onClick={onClose} aria-label="Close logs">
-                    ✕
+                    <i className="fa-solid fa-xmark"></i>
                 </button>
             </div>
 

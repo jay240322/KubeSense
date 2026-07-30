@@ -36,19 +36,19 @@ export default function ClusterAnalysis({
     const text = analysis.toLowerCase();
 
     if (text.includes("critical")) {
-      return { label: "🔴 CRITICAL", className: "critical" };
+      return { label: "CRITICAL", className: "critical", icon: "fa-circle-radiation" };
     }
 
     if (text.includes("high")) {
-      return { label: "🟠 HIGH", className: "high" };
+      return { label: "HIGH", className: "high", icon: "fa-triangle-exclamation" };
     }
 
     if (text.includes("medium")) {
-      return { label: "🟡 MEDIUM", className: "medium" };
+      return { label: "MEDIUM", className: "medium", icon: "fa-circle-info" };
     }
 
     if (text.includes("low")) {
-      return { label: "🟢 LOW", className: "low" };
+      return { label: "LOW", className: "low", icon: "fa-circle-check" };
     }
 
     return null;
@@ -60,22 +60,30 @@ export default function ClusterAnalysis({
     <div className="cluster-analysis">
       <div className="analysis-header">
         <h2>
-          {type === "cluster" ? "🌐 AI Cluster Analysis" : "🤖 AI Pod Analysis"}
+          {type === "cluster" ? (
+            <>
+              <i className="fa-solid fa-circle-nodes"></i> AI Cluster Analysis
+            </>
+          ) : (
+            <>
+              <i className="fa-solid fa-brain"></i> AI Pod Analysis
+            </>
+          )}
         </h2>
         <button className="close-button" onClick={onClose} aria-label="Close analysis">
-          ✕
+          <i className="fa-solid fa-xmark"></i>
         </button>
       </div>
 
       {loading && (
         <p className="loading">
-          {type === "cluster" ? "Analyzing Kubernetes cluster..." : "Analyzing Kubernetes pod..."}
+          <i className="fa-solid fa-circle-notch fa-spin"></i> {type === "cluster" ? "Analyzing Kubernetes cluster..." : "Analyzing Kubernetes pod..."}
         </p>
       )}
 
       {error && (
         <p className="error">
-          {error}
+          <i className="fa-solid fa-triangle-exclamation"></i> {error}
         </p>
       )}
 
@@ -84,14 +92,22 @@ export default function ClusterAnalysis({
           <div className="analysis-toolbar">
             {severity && (
               <div className={`severity-badge ${severity.className}`}>
-                {severity.label}
+                <i className={`fa-solid ${severity.icon}`}></i> {severity.label}
               </div>
             )}
             <button
               className="copy-button"
               onClick={handleCopy}
             >
-              {copied ? "✅ Copied!" : "📋 Copy Analysis"}
+              {copied ? (
+                <>
+                  <i className="fa-solid fa-check"></i> Copied!
+                </>
+              ) : (
+                <>
+                  <i className="fa-solid fa-copy"></i> Copy Analysis
+                </>
+              )}
             </button>
           </div>
 
