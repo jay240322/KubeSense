@@ -17,6 +17,7 @@ def analyze_pod(
     db: Session,
     namespace: str,
     pod_name: str,
+    api_key: str | None = None,
 ):
     pod_details = get_pod_details(
         namespace,
@@ -55,6 +56,7 @@ Please analyze the Kubernetes pod and produce a troubleshooting report.
         analysis = generate_ai_response(
             db=db,
             prompt=prompt,
+            api_key=api_key,
         )
     except Exception as e:
         print(f"Pod analysis failed: {e}")

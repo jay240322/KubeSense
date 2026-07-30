@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from google import genai
+import uuid
 
 from app.database import get_db
-from app.models.settings import Settings
 from app.schemas.settings import (
     GeminiKeyRequest,
     SettingsResponse,
@@ -15,20 +15,19 @@ router = APIRouter(
     tags=["Settings"],
 )
 
+# Random instance ID generated fresh on every server startup
+SERVER_INSTANCE_ID = str(uuid.uuid4())
+
 
 @router.get("")
 def get_settings(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
-    settings = db.query(Settings).first()
-
     return {
-        "geminiConfigured": (
-            settings is not None
-            and bool(settings.gemini_api_key)
-        ),
-        "geminiApiKey": settings.gemini_api_key if settings else ""
+        "geminiConfigured": False,
+        "geminiApiKey": "",
+        "serverInstanceId": SERVER_INSTANCE_ID
     }
 
 
@@ -54,18 +53,6 @@ def save_gemini_key(
             detail="Invalid Gemini API key.",
         )
 
-    settings = db.query(Settings).first()
-
-    if settings is None:
-        settings = Settings(
-            gemini_api_key=request.gemini_api_key,
-        )
-        db.add(settings)
-    else:
-        settings.gemini_api_key = request.gemini_api_key
-
-    db.commit()
-
     return SettingsResponse(
-        message="Gemini API key saved successfully.",
+        message="Gemini API key validated successfully.",
     )

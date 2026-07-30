@@ -18,10 +18,26 @@ export default function useGeminiSettings() {
 
       const result = await getGeminiSettings();
 
-      setConfigured(result.geminiConfigured);
-      setApiKey(result.geminiApiKey || "");
+      const savedInstanceId = localStorage.getItem("server_instance_id");
+      if (result.serverInstanceId && result.serverInstanceId !== savedInstanceId) {
+        // Server instance changed (fresh container setup)! Clear local storage API key
+        localStorage.removeItem("gemini_api_key");
+        localStorage.setItem("server_instance_id", result.serverInstanceId);
+        setConfigured(false);
+        setApiKey("");
+        return false;
+      }
 
-      return result.geminiConfigured;
+      const localKey = localStorage.getItem("gemini_api_key");
+      if (localKey) {
+        setConfigured(true);
+        setApiKey(localKey);
+        return true;
+      }
+
+      setConfigured(false);
+      setApiKey("");
+      return false;
     } catch (err) {
       console.error(err);
       setError("Failed to load Gemini settings");
@@ -31,15 +47,25 @@ export default function useGeminiSettings() {
     }
   }
 
-  async function save(apiKey: string) {
+  async function save(apiKeyInput: string) {
     try {
       setLoading(true);
       setError("");
 
-      await saveGeminiApiKey(apiKey);
+      // Validate the key on the backend
+      await saveGeminiApiKey(apiKeyInput);
+
+      // Save key locally
+      localStorage.setItem("gemini_api_key", apiKeyInput);
+
+      // Fetch settings again to guarantee the serverInstanceId is aligned
+      const result = await getGeminiSettings();
+      if (result.serverInstanceId) {
+        localStorage.setItem("server_instance_id", result.serverInstanceId);
+      }
 
       setConfigured(true);
-      setApiKey(apiKey);
+      setApiKey(apiKeyInput);
 
       return true;
     } catch (err) {
