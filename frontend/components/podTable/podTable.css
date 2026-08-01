@@ -1,0 +1,46 @@
+.table-container {
+  margin-top: 24px;
+  background: rgba(30, 41, 59, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+}
+
+.pod-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.pod-table thead {
+  background: rgba(13, 18, 30, 0.65);
+}
+
+.pod-table th {
+  padding: 14px 20px;
+  text-align: left;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 750;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.pod-table td {
+  padding: 14px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+  color: #cbd5e1;
+  font-size: 13.5px;
+  font-weight: 500;
+}
+
+.pod-table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.pod-table tbody tr:hover {
+  background: rgba(99, 102, 241, 0.04);
+}

@@ -1,0 +1,102 @@
+.pod-details {
+  margin-top: 24px;
+  padding: 28px;
+  border-radius: 16px;
+  background: rgba(30, 41, 59, 0.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  color: white;
+  animation: fadeIn 0.3s ease;
+}
+
+.pod-details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.pod-details h2 {
+  font-size: 20px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0 !important;
+}
+
+.close-button {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: #64748b;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 14px;
+}
+
+.close-button:hover {
+  color: #ffffff;
+  background-color: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.detail-row span:first-child {
+  font-weight: 600;
+  font-size: 13.5px;
+  color: #64748b;
+}
+
+.detail-row span:last-child {
+  font-weight: 500;
+  font-size: 13.5px;
+  color: #f1f5f9;
+}
+
+.images-section {
+  margin-top: 24px;
+}
+
+.images-section h3 {
+  font-size: 12px;
+  font-weight: 750;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  margin-bottom: 12px;
+}
+
+.images-section ul {
+  padding-left: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.images-section li {
+  padding: 8px 12px;
+  background: rgba(13, 18, 30, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  font-family: var(--font-mono), monospace;
+  font-size: 12.5px;
+  color: #a5b4fc;
+  word-break: break-all;
+}

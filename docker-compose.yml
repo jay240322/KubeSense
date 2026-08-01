@@ -1,0 +1,35 @@
+services:
+  backend:
+    build:
+      context: ./backend
+
+    container_name: kubesense-backend
+
+    ports:
+      - "8000:8000"
+
+    env_file:
+      - ./backend/.env
+
+    volumes:
+      - /home/jay/.kube:/home/jay/.kube:ro
+      - /home/jay/.minikube:/home/jay/.minikube:ro
+
+    environment:
+      KUBECONFIG: /home/jay/.kube/config
+
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+
+    container_name: kubesense-frontend
+
+    ports:
+      - "3000:3000"
+
+    depends_on:
+      - backend
+
+    restart: unless-stopped

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: kubesense-config
+  namespace: kubesense
+
+data:
+  GEMINI_MODEL: "gemini-3.1-flash-lite"
+  BACKEND_PORT: "8000"
+  FRONTEND_PORT: "3000"

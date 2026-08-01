@@ -1,24 +1,26 @@
-import styles from "./page.module.css";
+"use client";
+
+import LoginForm from "@/components/auth/LoginForm";
+import "./page.css";
 
 export default function Home() {
   return (
-    <main className={styles.container}>
-      <div className={styles.content}>
-        <h1 className={styles.title}>KubeSense</h1>
+    <main className="login-page-container">
+      <div className="login-glow-1"></div>
+      <div className="login-glow-2"></div>
 
-        <p className={styles.subtitle}>
-          Ai-Powerder kubernetes troubleshooting assistant
-        </p>
+      <div className="login-card animate-fade-in">
+        <div className="login-header">
+          <h1 className="login-title">
+            <i className="fa-solid fa-bolt-lightning login-logo-icon"></i> KubeSense
+          </h1>
 
-        <div className={styles.card}>
-          <h2 className={styles.cardTitle}>Project Ststus</h2>
-          <p className={styles.text}>
-            Frontend is running successfully.
-          </p>
-          <p className={styles.status}>
-            Backend: not connected
+          <p className="login-subtitle">
+            AI-Powered Kubernetes Troubleshooting Assistant
           </p>
         </div>
+
+        <LoginForm />
       </div>
     </main>
   );

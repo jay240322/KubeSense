@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: kubesense-backend
+  namespace: kubesense
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: kubesense-backend
+
+  template:
+    metadata:
+      labels:
+        app: kubesense-backend
+
+    spec:
+      serviceAccountName: kubesense-backend
+
+      containers:
+        - name: backend
+
+          image: joypatel2403/kubesense-backend:latest
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 8000
+
+          env:
+
+            # Gemini Configuration
+
+            - name: GOOGLE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: kubesense-secret
+                  key: GOOGLE_API_KEY
+
+            - name: GEMINI_MODEL
+              valueFrom:
+                configMapKeyRef:
+                  name: kubesense-config
+                  key: GEMINI_MODEL
+
+            # PostgreSQL Configuration
+
+            - name: POSTGRES_HOST
+              value: postgres-service
+
+            - name: POSTGRES_PORT
+              value: "5432"
+
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_DB
+
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_USER
+
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+
+            # KubeSense Authentication
+
+            - name: KUBESENSE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kubesense-auth
+                  key: KUBESENSE_USERNAME
+
+            - name: KUBESENSE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kubesense-auth
+                  key: KUBESENSE_PASSWORD
