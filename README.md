@@ -85,6 +85,11 @@ kubectl get nodes
 # 📦 Installation
 
 
+Create a namespace first:
+
+```bash
+ kubectl create namespace kubesense
+```
 Deploy KubeSense using a single command:
 
 ```bash
