@@ -1,0 +1,386 @@
+# Source: service-account.yaml
+---
+apiVersion: v1
+kind: ServiceAccount
+
+metadata:
+  name: kubesense-backend
+  namespace: kubesense
+
+# Source: role.yaml
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+
+metadata:
+  name: kubesense-backend-role
+
+rules:
+  - apiGroups: [""]
+    resources:
+      - pods
+      - pods/log
+      - events
+      - namespaces
+    verbs:
+      - get
+      - list
+      - watch
+
+# Source: role-binding.yaml
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+
+metadata:
+  name: kubesense-backend-rolebinding
+
+subjects:
+  - kind: ServiceAccount
+    name: kubesense-backend
+    namespace: kubesense
+
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kubesense-backend-role
+
+# Source: configmap.yaml
+---
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: kubesense-config
+  namespace: kubesense
+
+data:
+  GEMINI_MODEL: "gemini-3.1-flash-lite"
+  BACKEND_PORT: "8000"
+  FRONTEND_PORT: "3000"
+
+# Source: secret.yaml
+---
+apiVersion: v1
+kind: Secret
+
+metadata:
+  name: kubesense-secret
+  namespace: kubesense
+
+type: Opaque
+
+stringData:
+  GOOGLE_API_KEY: "REPLACE-WITH-YOUR_GOOGLE_API_KEY"
+
+# Source: auth-secret.yaml
+---
+apiVersion: v1
+kind: Secret
+
+metadata:
+  name: kubesense-auth
+  namespace: kubesense
+
+type: Opaque
+
+stringData:
+  KUBESENSE_USERNAME: admin
+  KUBESENSE_PASSWORD: KubeSense@123
+
+# Source: postgres-secret.yaml
+---
+apiVersion: v1
+kind: Secret
+
+metadata:
+  name: postgres-secret
+  namespace: kubesense
+
+type: Opaque
+
+stringData:
+  POSTGRES_DB: kubesense
+  POSTGRES_USER: kubesense
+  POSTGRES_PASSWORD: kubesense123
+
+# Source: postgres-pvc.yaml
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+
+metadata:
+  name: postgres-pvc
+  namespace: kubesense
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+
+  resources:
+    requests:
+      storage: 5Gi
+
+# Source: postgres-deployment.yaml
+---
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: postgres
+  namespace: kubesense
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: postgres
+
+  template:
+    metadata:
+      labels:
+        app: postgres
+
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:17
+
+          ports:
+            - containerPort: 5432
+
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_DB
+
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_USER
+
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+
+          volumeMounts:
+            - name: postgres-storage
+              mountPath: /var/lib/postgresql/data
+
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: postgres-pvc
+
+# Source: postgres-service.yaml
+---
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: postgres-service
+  namespace: kubesense
+
+spec:
+  selector:
+    app: postgres
+
+  ports:
+    - port: 5432
+      targetPort: 5432
+
+  type: ClusterIP
+
+# Source: backend-service.yaml
+---
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: kubesense-backend-service
+  namespace: kubesense
+
+spec:
+  selector:
+    app: kubesense-backend
+
+  ports: 
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+
+  type: ClusterIP
+
+# Source: backend-deployment.yaml
+---
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: kubesense-backend
+  namespace: kubesense
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: kubesense-backend
+
+  template:
+    metadata:
+      labels:
+        app: kubesense-backend
+
+    spec:
+      serviceAccountName: kubesense-backend
+
+      containers:
+        - name: backend
+
+          image: joypatel2403/kubesense-backend:latest
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 8000
+
+          env:
+
+            # Gemini Configuration
+
+            - name: GOOGLE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: kubesense-secret
+                  key: GOOGLE_API_KEY
+
+            - name: GEMINI_MODEL
+              valueFrom:
+                configMapKeyRef:
+                  name: kubesense-config
+                  key: GEMINI_MODEL
+
+            # PostgreSQL Configuration
+
+            - name: POSTGRES_HOST
+              value: postgres-service
+
+            - name: POSTGRES_PORT
+              value: "5432"
+
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_DB
+
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_USER
+
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+
+            # KubeSense Authentication
+
+            - name: KUBESENSE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kubesense-auth
+                  key: KUBESENSE_USERNAME
+
+            - name: KUBESENSE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kubesense-auth
+                  key: KUBESENSE_PASSWORD
+
+# Source: frontend-service.yaml
+---
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: kubesense-frontend-service
+  namespace: kubesense
+
+spec:
+  selector:
+    app: kubesense-frontend
+
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+
+  type: ClusterIP
+
+# Source: frontend-deployment.yaml
+---
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: kubesense-frontend
+  namespace: kubesense
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: kubesense-frontend
+
+  template:
+    metadata:
+      labels:
+        app: kubesense-frontend
+
+    spec:
+      containers:
+        - name: frontend
+          image: joypatel2403/kubesense-frontend:latest
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 3000
+
+# Source: ingress.yaml
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kubesense-ingress
+  namespace: kubesense
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: kubesense.local
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: kubesense-backend-service
+                port:
+                  number: 8000
+
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kubesense-frontend-service
+                port:
+                  number: 3000
