@@ -57,7 +57,8 @@ KubeSense follows a cloud-native microservices architecture.
 
 <div align="center">
 
-> <img width="1876" height="1143" alt="kubesense ( system diagram)" src="https://github.com/user-attachments/assets/0a20bccf-5b60-4e36-afc5-4140c7db5b0b" />
+<img width="6144" height="4096" alt="WhatsApp Image 2026-08-03 at 7 28 35 PM (1)" src="https://github.com/user-attachments/assets/d23d18c2-d5fa-433d-b690-2b30fa5bab78" />
+
 
 
 </div>
