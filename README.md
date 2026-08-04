@@ -57,7 +57,8 @@ KubeSense follows a cloud-native microservices architecture.
 
 <div align="center">
 
-<img width="6144" height="4096" alt="WhatsApp Image 2026-08-03 at 7 28 35 PM (1)" src="https://github.com/user-attachments/assets/d23d18c2-d5fa-433d-b690-2b30fa5bab78" />
+<img width="1485" height="1059" alt="ChatGPT Image Aug 4, 2026, 09_11_37 AM" src="https://github.com/user-attachments/assets/3b3e8367-b4e2-4169-884a-f8b11c8ea0bc" />
+
 
 
 
